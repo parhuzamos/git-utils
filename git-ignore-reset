@@ -1,0 +1,15 @@
+#!/bin/bash
+echo -n -e "Resetting the ignore list: "
+outcome="no files to reset.";
+for line in `git ls-files -v | grep "^[[:lower:]]"`
+do
+	if test -f $line; then
+		git update-index --no-assume-unchanged $line; >>~/tmp/gitignorereset
+		if [[ $? -ne 0 ]]; then
+			echo "Error";
+			cat ~/tmp/gitignorereset
+		fi;
+		outcome="\e[00;32mDone.\e[00m";
+	fi;
+done;
+echo -e $outcome;
