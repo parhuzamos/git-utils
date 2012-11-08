@@ -1,0 +1,23 @@
+#!/bin/bash
+
+git status | grep "nothing to commit" >/dev/null
+if [ "$?" -ne "0" ]; then 
+    echo -e "\e[1;33;31mDirty: $c\e[00m";
+    git status
+    exit 1;
+fi
+
+echo -e "Checking out \e[00;32mmaster\e[00m...";
+git status | grep "On branch master" >/dev/null
+if [ "$?" -eq "0" ]; then 
+    echo -e "\e[00;31mAlready on master.\e[00m";
+else
+    git fetch
+    git checkout master
+    git merge origin/master
+    git submodule init
+    git submodule update --recursive
+    exit 0;
+fi
+exit 0;
+
