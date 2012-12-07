@@ -1,0 +1,23 @@
+#!/bin/bash
+
+branchname=$1
+if [ "$branchname" == "" ]; then 
+    read -p "Enter new branch name: " branchname
+fi
+
+if [ "$branchname" == "" ]; then 
+    echo -e "\e[1;33;31mNo name specified for the new branch.\e[00m";
+    exit 1;
+fi
+
+git status | grep "nothing to commit" >/dev/null
+if [ "$?" -ne "0" ]; then 
+    echo -e "\e[1;33;31mWorking directory is dirty. Stash your changes.\e[00m";
+    git status
+    exit 1;
+fi
+
+echo "Creating \"$branchname\" from current position..."
+git checkout -b $branchname
+echo "Creating submodule branches..."
+git submodule foreach --recursive git checkout -b $branchname
