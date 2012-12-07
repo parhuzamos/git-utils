@@ -16,6 +16,7 @@ else
     git checkout master
     git merge origin/master
     git submodule init
+    git submodule sync
     git submodule update --recursive
     exit 0;
 fi
