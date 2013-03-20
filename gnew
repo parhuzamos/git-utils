@@ -10,9 +10,9 @@ if [ "$branchname" == "" ]; then
     exit 1;
 fi
 
-git status | grep "nothing to commit" >/dev/null
+git status | grep "nothing to commit" &>/dev/null
 if [ "$?" -ne "0" ]; then 
-    echo -e "\e[1;33;31mWorking directory is dirty. Stash your changes.\e[00m";
+    echo -e "\e[1;33;31mWorking directory is dirty. Save or stash your changes.\e[00m";
     git status
     exit 1;
 fi

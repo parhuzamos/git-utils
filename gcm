@@ -1,24 +1,24 @@
 #!/bin/bash
 
-git status | grep "nothing to commit" >/dev/null
+git status | grep "On branch master" &>/dev/null
+if [ "$?" -eq "0" ]; then 
+    echo -e "\e[00;31mAlready on master.\e[00m";
+    exit 1;
+fi;
+
+git status | grep "nothing to commit" &>/dev/null
 if [ "$?" -ne "0" ]; then 
-    echo -e "\e[1;33;31mDirty: $c\e[00m";
+    echo -e "\e[1;33;31mWorking directory is dirty. Save or stash your changes.\e[00m";
     git status
     exit 1;
 fi
 
 echo -e "Checking out \e[00;32mmaster\e[00m...";
-git status | grep "On branch master" >/dev/null
-if [ "$?" -eq "0" ]; then 
-    echo -e "\e[00;31mAlready on master.\e[00m";
-else
-    git fetch
-    git checkout master
-    git merge origin/master
-    git submodule init
-    git submodule sync
-    git submodule update --recursive
-    exit 0;
-fi
-exit 0;
-
+git fetch |  echo "Error while fetching." & exit 1 
+git checkout master |  echo "Error while checking out master." & exit 1 
+git merge origin/master |  echo "Error while fast forwarding master." & exit 1 
+git submodule init |  echo "Error while initializing submodules." & exit 1 
+git submodule sync |  echo "Error while syncing submodules." & exit 1 
+git submodule update --recursive |  echo "Error while updating submodules." & exit 1 
+git clean -fd |  echo "Error during clean up." & exit 1 
+git submodule foreach git clean -fd |  echo "Error during submodule cleaning." & exit 1 
