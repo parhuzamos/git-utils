@@ -14,11 +14,12 @@ if [ "$?" -ne "0" ]; then
 fi
 
 echo -e "Checking out \e[00;32mmaster\e[00m...";
-git fetch || echo "Error while fetching." & exit 1 
-git checkout master || echo "Error while checking out master." & exit 1 
-git merge origin/master || echo "Error while fast forwarding master." & exit 1 
-git submodule init || echo "Error while initializing submodules." & exit 1 
-git submodule sync || echo "Error while syncing submodules." & exit 1 
-git submodule update --recursive || echo "Error while updating submodules." & exit 1 
-git clean -fd || echo "Error during clean up." & exit 1 
-git submodule foreach git clean -fd || echo "Error during submodule cleaning." & exit 1 
+set -e
+git fetch || ( echo "Error while fetching." && exit 1 )
+git checkout master || ( echo "Error while checking out master." && exit 1 )
+git merge origin/master || ( echo "Error while fast forwarding master." && exit 1 )
+git submodule init || ( echo "Error while initializing submodules." && exit 1 )
+git submodule sync || ( echo "Error while syncing submodules." && exit 1 )
+git submodule update --recursive || ( echo "Error while updating submodules." && exit 1 )
+git clean -fd || ( echo "Error during clean up." && exit 1 )
+git submodule foreach git clean -fd || ( echo "Error during submodule cleaning." && exit 1 )
